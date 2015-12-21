@@ -16,7 +16,7 @@ CLIENT_NAME=$1
 cd /etc/openvpn/easy-rsa/
 source vars
 
-./build-key ${CLIENT_NAME}
+./build-key --batch ${CLIENT_NAME}
 
 mkdir -pv /download-openvpn-key/${CLIENT_NAME}
 

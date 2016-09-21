@@ -28,7 +28,7 @@ virt-install \
     --ram=1024 \
     --vcpus=1 \
     --os-type=linux \
-    --os-variant=ubuntutrusty \
+    --os-variant=generic \
     --network bridge=virbr0 \
     --disk path=${PATH_LIBVIRT_IMG}/${INSTANCE_NAME}.img,format=qcow2,bus=virtio,cache=none \
     --noautoconsole \

@@ -1,7 +1,6 @@
 # ubuntu-kvm-tools
-ubuntu kvm tools
+Utilities to manage VM by command line.
 
-# How to
 ## Setup ubuntu-kvm-tools
 ### 1. Install kvm on ubuntu
 ```sh
@@ -26,6 +25,9 @@ git clone https://github.com/tranhuucuong91/ubuntu-kvm-tools.git
 
 ```sh
 cd ubuntu-kvm-tools/vm-tools
+
+# change config if need
+cp config/config.tmpl.sh config/config.sh
 ```
 
 ### 3. Prepare Materials
@@ -46,7 +48,6 @@ sudo ls ${PATH_LIBVIRT}/images/
 vm_default_ssh_key
 vm_default_ssh_key.pub
 ```
-
 
 ## Usage ubuntu-kvm-tools
 ### Create VM

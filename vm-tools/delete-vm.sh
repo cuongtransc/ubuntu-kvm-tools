@@ -1,12 +1,24 @@
 #!/bin/bash
+set -e
 
-if [ -z "$1" ]; then
-    echo "Usage: ./delete-vm.sh <domain>"
-    exit 1
-fi
+################### Config ###################
+BASE_DIR=$(dirname ${0})
+BASE_DIR=$(readlink -f "${BASE_DIR}")
 
+# default configs
 PATH_LIBVIRT='/var/lib/libvirt'
 PATH_LIBVIRT_IMG=${PATH_LIBVIRT}/images
+
+# get custom configs
+if [ -f ${BASE_DIR}/config/config.sh ]; then
+    source ${BASE_DIR}/config/config.sh
+fi
+
+################### Usage ###################
+if [ -z "$1" ]; then
+    echo "Usage: ./delete-vm.sh <vm-name>"
+    exit 1
+fi
 
 INSTANCE_NAME=$1
 
@@ -17,14 +29,13 @@ if [ ! -e ${PATH_LIBVIRT_IMG}/${INSTANCE_NAME}.img ]; then
     exit 1
 fi
 
-echo "step 1: shutdown vm"
+echo "Step 1: Shutdown VM"
 virsh destroy ${INSTANCE_NAME}
 
-echo "step 2: undefine vm"
+echo "Step 2: Undefine VM"
 virsh undefine ${INSTANCE_NAME}
 
-echo "step 3: remove disk"
+echo "Step 3: Remove disk"
 sudo rm ${PATH_LIBVIRT_IMG}/${INSTANCE_NAME}.img
 
-echo "done!"
-
+echo "Done!"

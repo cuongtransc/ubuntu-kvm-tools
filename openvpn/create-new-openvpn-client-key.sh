@@ -13,6 +13,11 @@ fi
 
 CLIENT_NAME=$1
 
+if [[ $EUID -ne 0 ]]; then
+    echo "Please run using sudo or as the root user!"
+    exit 1
+fi
+
 cd /etc/openvpn/easy-rsa/
 source vars
 

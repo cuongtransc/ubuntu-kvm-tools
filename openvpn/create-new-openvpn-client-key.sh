@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# create new openvpn client key
+# Create new openvpn client key
 set -e
 
 BASEDIR=$(readlink -f $(dirname ${0}))
@@ -25,16 +25,18 @@ source vars
 
 mkdir -pv /download-openvpn-key/${CLIENT_NAME}
 
+# Copy openvpn client config
 cp /etc/openvpn/easy-rsa/keys/${CLIENT_NAME}.crt /download-openvpn-key/${CLIENT_NAME}
 cp /etc/openvpn/easy-rsa/keys/${CLIENT_NAME}.key /download-openvpn-key/${CLIENT_NAME}
 cp /etc/openvpn/easy-rsa/keys/client.ovpn /download-openvpn-key/${CLIENT_NAME}
 cp /etc/openvpn/ca.crt /download-openvpn-key/${CLIENT_NAME}
+cp $BASEDIR/connect_openvpn.sh /download-openvpn-key/${CLIENT_NAME}
 
-
+# Modify some config
 cd /download-openvpn-key/${CLIENT_NAME}
-sed -i "s/remote my-server-1 1194/remote ${OPENVPN_SERVER_IP} ${OPENVPN_SERVER_PORT}/" client.ovpn
-sed -i "s/cert client.crt/cert ${CLIENT_NAME}.crt/" client.ovpn
-sed -i "s/key client.key/key ${CLIENT_NAME}.key/" client.ovpn
+sed -i "s/remote my-server-1 1194/remote ${OPENVPN_SERVER_IP} ${OPENVPN_SERVER_PORT}/" client_${CLIENT_NAME}.ovpn
+sed -i "s/cert client.crt/cert ${CLIENT_NAME}.crt/" client_${CLIENT_NAME}.ovpn
+sed -i "s/key client.key/key ${CLIENT_NAME}.key/" client_${CLIENT_NAME}.ovpn
 
 cd /download-openvpn-key
 tar czf ${CLIENT_NAME}.tgz ${CLIENT_NAME}

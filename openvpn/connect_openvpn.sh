@@ -15,6 +15,7 @@ if [ -n "${CHECK_PROCESS_EXISTS}" ]; then
     exit 0
 fi
 
+cd $BASEDIR
 sudo openvpn --daemon --config $OPENVPN_CONFIG
 
 echo "Connected OpenVPN!"

@@ -12,6 +12,7 @@ if [ -z "$1" ]; then
 fi
 
 CLIENT_NAME=$1
+CLIENT_OVPN=client_${CLIENT_NAME}.ovpn
 
 if [[ $EUID -ne 0 ]]; then
     echo "Please run using sudo or as the root user!"
@@ -26,17 +27,18 @@ source vars
 mkdir -pv /download-openvpn-key/${CLIENT_NAME}
 
 # Copy openvpn client config
-cp /etc/openvpn/easy-rsa/keys/${CLIENT_NAME}.crt /download-openvpn-key/${CLIENT_NAME}
-cp /etc/openvpn/easy-rsa/keys/${CLIENT_NAME}.key /download-openvpn-key/${CLIENT_NAME}
-cp /etc/openvpn/easy-rsa/keys/client.ovpn /download-openvpn-key/${CLIENT_NAME}
-cp /etc/openvpn/ca.crt /download-openvpn-key/${CLIENT_NAME}
-cp $BASEDIR/connect_openvpn.sh /download-openvpn-key/${CLIENT_NAME}
+cp /etc/openvpn/easy-rsa/keys/${CLIENT_NAME}.crt /download-openvpn-key/${CLIENT_NAME}/${CLIENT_NAME}.crt
+cp /etc/openvpn/easy-rsa/keys/${CLIENT_NAME}.key /download-openvpn-key/${CLIENT_NAME}/${CLIENT_NAME}.key
+cp /etc/openvpn/easy-rsa/keys/client.ovpn /download-openvpn-key/${CLIENT_NAME}/${CLIENT_OVPN}
+cp /etc/openvpn/ca.crt /download-openvpn-key/${CLIENT_NAME}/ca.crt
+
+cp $BASEDIR/connect_openvpn.sh /download-openvpn-key/${CLIENT_NAME}/connect_openvpn.sh
 
 # Modify some config
 cd /download-openvpn-key/${CLIENT_NAME}
-sed -i "s/remote my-server-1 1194/remote ${OPENVPN_SERVER_IP} ${OPENVPN_SERVER_PORT}/" client_${CLIENT_NAME}.ovpn
-sed -i "s/cert client.crt/cert ${CLIENT_NAME}.crt/" client_${CLIENT_NAME}.ovpn
-sed -i "s/key client.key/key ${CLIENT_NAME}.key/" client_${CLIENT_NAME}.ovpn
+sed -i "s/remote my-server-1 1194/remote ${OPENVPN_SERVER_IP} ${OPENVPN_SERVER_PORT}/" ${CLIENT_OVPN}
+sed -i "s/cert client.crt/cert ${CLIENT_NAME}.crt/" ${CLIENT_OVPN}
+sed -i "s/key client.key/key ${CLIENT_NAME}.key/" ${CLIENT_OVPN}
 
 cd /download-openvpn-key
 tar czf ${CLIENT_NAME}.tgz ${CLIENT_NAME}
